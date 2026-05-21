@@ -8,6 +8,9 @@ import Terms from "./pages/Terms";
 import RegistrationSuccess from "./pages/RegistrationSuccess";
 import PublisherDashboard from "./pages/PublisherDashboard";
 import Programs from "./pages/Programs";
+import Reports from "./pages/Reports";
+import Payments from "./pages/Payments";
+import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -26,9 +29,9 @@ export default function App() {
       {/* Dashboard Pages */}
       <Route path="/dashboard" element={<ProtectedRoute><PublisherDashboard /></ProtectedRoute>} />
 <Route path="/programs" element={<ProtectedRoute><Programs /></ProtectedRoute>} />
-<Route path="/reports" element={<ProtectedRoute><PublisherDashboard /></ProtectedRoute>} />
-<Route path="/payments" element={<ProtectedRoute><PublisherDashboard /></ProtectedRoute>} />
-<Route path="/profile" element={<ProtectedRoute><PublisherDashboard /></ProtectedRoute>} />
+<Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+<Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
+<Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
 
       {/* Default redirect */}
