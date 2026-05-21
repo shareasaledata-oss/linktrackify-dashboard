@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import PublisherRegister from "./pages/PublisherRegister";
+import AdvertiserRegister from "./pages/AdvertiserRegister";
+import ForgotPassword from "./pages/ForgotPassword";
+import Terms from "./pages/Terms";
+import RegistrationSuccess from "./pages/RegistrationSuccess";
+import PublisherDashboard from "./pages/PublisherDashboard";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      {/* Auth Pages */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/publisher/register" element={<PublisherRegister />} />
+      <Route path="/advertiser/register" element={<AdvertiserRegister />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/registration-success" element={<RegistrationSuccess />} />
+
+      {/* Dashboard Pages */}
+      <Route path="/dashboard" element={<PublisherDashboard />} />
+
+      {/* Default redirect */}
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="*" element={<Navigate to="/login" />} />
+    </Routes>
   );
 }
-
-export default App;
