@@ -7,6 +7,9 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Terms from "./pages/Terms";
 import RegistrationSuccess from "./pages/RegistrationSuccess";
 import PublisherDashboard from "./pages/PublisherDashboard";
+import Programs from "./pages/Programs";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminDashboard from "./pages/AdminDashboard";
 
 export default function App() {
   return (
@@ -21,7 +24,12 @@ export default function App() {
       <Route path="/registration-success" element={<RegistrationSuccess />} />
 
       {/* Dashboard Pages */}
-      <Route path="/dashboard" element={<PublisherDashboard />} />
+      <Route path="/dashboard" element={<ProtectedRoute><PublisherDashboard /></ProtectedRoute>} />
+<Route path="/programs" element={<ProtectedRoute><Programs /></ProtectedRoute>} />
+<Route path="/reports" element={<ProtectedRoute><PublisherDashboard /></ProtectedRoute>} />
+<Route path="/payments" element={<ProtectedRoute><PublisherDashboard /></ProtectedRoute>} />
+<Route path="/profile" element={<ProtectedRoute><PublisherDashboard /></ProtectedRoute>} />
+<Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
 
       {/* Default redirect */}
       <Route path="/" element={<Navigate to="/login" />} />
