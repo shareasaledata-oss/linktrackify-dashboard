@@ -13,6 +13,8 @@ import Payments from "./pages/Payments";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminRoute from "./components/AdminRoute";
+import AdminLogin from "./pages/AdminLogin";
 
 export default function App() {
   return (
@@ -32,7 +34,8 @@ export default function App() {
 <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
 <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-<Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+<Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+<Route path="/admin-login" element={<AdminLogin />} />
 
       {/* Default redirect */}
       <Route path="/" element={<Navigate to="/login" />} />
