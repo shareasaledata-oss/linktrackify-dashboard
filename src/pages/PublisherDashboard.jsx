@@ -24,10 +24,6 @@ const glassCard = {
   borderRadius: "24px",
 };
 
-const glassCardSmall = {
-  ...glassCard,
-  borderRadius: "16px",
-};
 
 function Sidebar({ open, setOpen }) {
   const location = useLocation();
@@ -229,13 +225,10 @@ export default function PublisherDashboard() {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {STATS.map((stat) => (
-              <div key={stat.label} className="relative overflow-hidden p-5" style={glassCard}>
-                {/* Glow orb */}
-                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none"
-                  style={{ background: `radial-gradient(circle, ${stat.glow} 0%, transparent 70%)`, filter: "blur(8px)" }} />
-                {/* Top border shine */}
-                <div className="absolute top-0 left-0 right-0 h-px"
-                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)" }} />
+              <div key={stat.label} className="relative overflow-hidden p-5" style={{...glassCard, background: "rgba(12,20,32,0.7)"}}>
+                {/* Top border shine only */}
+                <div className="absolute top-0 left-0 right-0 h-px rounded-t-3xl"
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)" }} />
 
                 <div className="relative">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
