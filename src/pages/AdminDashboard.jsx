@@ -410,8 +410,7 @@ function PendingAdvertisers({ advertisers, onApprove, onReject, loading }) {
 }
 
 function ProgramApplications({ publishers, programApps, onApproveProgram, onRejectProgram, loading }) {
-  const [selectedAll, setSelectedAll] = useState({});
-
+  
   const approvedPublishers = publishers.filter(p => p.status === "approved");
 
   const handleSelectAll = (pubId, action) => {
