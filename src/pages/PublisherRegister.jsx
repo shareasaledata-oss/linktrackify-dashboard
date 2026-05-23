@@ -378,7 +378,7 @@ export default function PublisherRegister() {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
       options: {
@@ -386,10 +386,6 @@ export default function PublisherRegister() {
           full_name: `${formData.firstName} ${formData.lastName}`,
           username: formData.username,
           role: "publisher",
-          website: formData.website,
-          promotion_method: formData.promotionMethod,
-          monthly_traffic: formData.monthlyTraffic,
-          country: formData.country,
         },
       },
     });
@@ -398,6 +394,20 @@ export default function PublisherRegister() {
       setErrors({ submit: error.message });
       setLoading(false);
       return;
+    }
+
+    // Update profile with extra details
+    if (data?.user) {
+      await supabase.from("profiles").update({
+        full_name: `${formData.firstName} ${formData.lastName}`,
+        website: formData.website,
+        promotion_method: formData.promotionMethod,
+        monthly_traffic: formData.monthlyTraffic,
+        country: formData.country,
+        description: formData.description,
+        role: "publisher",
+        status: "pending",
+      }).eq("id", data.user.id);
     }
 
     navigate("/registration-success");
