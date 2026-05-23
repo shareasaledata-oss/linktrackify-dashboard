@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
 
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/dashboard", icon: <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg> },
@@ -118,6 +119,15 @@ function Sidebar({ open, setOpen }) {
 }
 
 function Topbar({ setOpen }) {
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/login");
+  };
+
   return (
     <header className="h-16 flex items-center justify-between px-6 sticky top-0 z-10"
       style={{
@@ -140,27 +150,81 @@ function Topbar({ setOpen }) {
       </div>
 
       <div className="flex items-center gap-2">
-        <button className="p-2.5 rounded-xl transition-all"
-          style={{ background: "rgba(255,255,255,0.05)", color: "rgba(148,163,184,0.7)" }}>
-          <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
-        <button className="p-2.5 rounded-xl transition-all"
-          style={{ background: "rgba(255,255,255,0.05)", color: "rgba(148,163,184,0.7)" }}>
-          <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-        </button>
-        <div className="flex items-center gap-2.5 ml-1 pl-3" style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, rgba(0,229,255,0.8), rgba(59,130,246,0.9))", boxShadow: "0 0 16px rgba(0,229,255,0.3), inset 0 1px 0 rgba(255,255,255,0.2)" }}>
-            <span className="text-white text-sm font-bold">P</span>
-          </div>
-          <div className="hidden sm:block">
-            <div className="text-sm font-semibold text-white">Publisher</div>
-            <div className="text-xs" style={{ color: "rgba(148,163,184,0.5)" }}>ID: pub-001</div>
-          </div>
+
+        {/* Notification Bell */}
+        <div className="relative">
+          <button onClick={() => { setShowNotifications(!showNotifications); setShowProfile(false); }}
+            className="p-2.5 rounded-xl transition-all"
+            style={{ background: "rgba(255,255,255,0.05)", color: "rgba(148,163,184,0.7)" }}>
+            <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
+
+          {showNotifications && (
+            <div className="absolute right-0 top-12 w-80 rounded-2xl overflow-hidden z-50"
+              style={{ background: "rgba(10,18,30,0.95)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 8px 40px rgba(0,0,0,0.6)" }}>
+              <div className="px-4 py-3 flex items-center justify-between"
+                style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <span className="text-sm font-semibold text-white">Notifications</span>
+                <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(0,229,255,0.1)", color: "#00E5FF" }}>0 new</span>
+              </div>
+              <div className="py-10 text-center">
+                <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="rgba(148,163,184,0.2)" strokeWidth={1.2} className="mx-auto mb-2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                <p className="text-xs" style={{ color: "rgba(148,163,184,0.4)" }}>No notifications yet</p>
+                <p className="text-xs mt-1" style={{ color: "rgba(148,163,184,0.2)" }}>Program approvals will appear here</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Profile */}
+        <div className="relative ml-1 pl-3" style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
+          <button onClick={() => { setShowProfile(!showProfile); setShowNotifications(false); }}
+            className="flex items-center gap-2.5 hover:opacity-80 transition-all">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg, rgba(0,229,255,0.8), rgba(59,130,246,0.9))", boxShadow: "0 0 16px rgba(0,229,255,0.3), inset 0 1px 0 rgba(255,255,255,0.2)" }}>
+              <span className="text-white text-sm font-bold">P</span>
+            </div>
+            <div className="hidden sm:block text-left">
+              <div className="text-sm font-semibold text-white">Publisher</div>
+              <div className="text-xs" style={{ color: "rgba(148,163,184,0.5)" }}>ID: pub-001</div>
+            </div>
+          </button>
+
+          {showProfile && (
+            <div className="absolute right-0 top-12 w-52 rounded-2xl overflow-hidden z-50"
+              style={{ background: "rgba(10,18,30,0.95)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 8px 40px rgba(0,0,0,0.6)" }}>
+              <div className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <p className="text-sm font-semibold text-white">Publisher</p>
+                <p className="text-xs" style={{ color: "rgba(148,163,184,0.4)" }}>ID: pub-001</p>
+              </div>
+              <div className="p-2">
+                <Link to="/profile" onClick={() => setShowProfile(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
+                  style={{ color: "rgba(148,163,184,0.8)" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.05)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  My Profile
+                </Link>
+                <button onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
+                  style={{ color: "#f87171" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(248,113,113,0.08)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>
